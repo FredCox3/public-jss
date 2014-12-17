@@ -19,16 +19,16 @@ Add-PSSnapin Quest.ActiveRoles.ADManagement
 
 # Stored Credentials for Silent Run. Can remove or comment out
 # and it will prompt for each API call
-$username = 'APIUsername'													# Change based on the Casper API Account
-$password = 'OpenSesame' 													# Change based on the Casper API Account
+$username = 'APIUsername'											# Change based on the Casper API Account
+$password = 'OpenSesame' 											# Change based on the Casper API Account
 $secPw = ConvertTo-SecureString $password -AsPlainText -Force
 $creds = New-Object pscredential -ArgumentList $username,$secPw		 
-$focusSiteID = "1"															# Change based on the site ID.
-$focusSiteName = "SITE1"													# Change based on the site ID Name.
+$focusSiteID = "1"													# Change based on the site ID.
+$focusSiteName = "SITE1"											# Change based on the site ID Name.
 $jssAddress = "https://jss.company.com:8443"
 $apiURL = "/JSSResource/classes/name/"
 
-# Directory Variables														# Change these to your environment
+# Directory Variables												# Change these to your environment
 $xmlWorkingDir = "D:\xml\"
 $classWorkingDir = "D:\classes\"
 $courseWorkingDir = "D:\courses\"
