@@ -9,11 +9,11 @@ print('Returns Maximum of 50 results. This only shows iPad Software.')
 appName = input('Which App Name? ')
 searchUri = "https://itunes.apple.com/search?term=" + appName + "&entity=iPadSoftware"
 
-s = requests.get(searchUri)
+searchResults = requests.get(searchUri)
 
-k = s.json()
-print('Results:', k['resultCount'])
+jsonData = searchResults.json()
+print('Results:', jsonData['resultCount'])
 
-for i in k['results']:
+for i in jsonData['results']:
     print('iOS App Name:',i['trackCensoredName'])
     print('Bundle ID:',i['bundleId'])
