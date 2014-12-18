@@ -2,7 +2,6 @@
 __author__ = 'Freddie Cox'
 __version__ = '0.1'
 
-
 import requests
 import json
 print('Returns Maximum of 50 results. This only shows iPad Software.')
