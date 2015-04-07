@@ -145,7 +145,7 @@ $programj='';
 
 				}
                         	
-				// mail serial to freddie
+				// mail serial to casper admin
 				$xini=ini_set("SMTP", "mail.company.com");
     				$yini=ini_set("sendmail_from","billgates@company.com");
     				$fromj = "billgates@company.com";
