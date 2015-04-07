@@ -2,14 +2,13 @@ $programj='';
         //JSS write
        if($jsswrite == "yes"){ 
 
-	
+		 // Connecting to MySQL Management System
 	         $rsj = mysql_query("SELECT * from computer where compassettag='$coassettag'");
        		 $mrj = mysql_fetch_array($rsj);
 
        		 $serialj = $mrj['compserial'];
 
         	 if($serialj!=''){
-			//echo "serial -".$serialj;
 		 	$userIDj = $sid;
        		 	$usernamej = "CasperAPIAccount";
        		 	$passwordj = "CasperAPIPassword";
@@ -17,11 +16,11 @@ $programj='';
 
        		 	$xml_dataj = "<computer><location><username>".$userIDj."</username></location></computer>";
 
+			// Perform a Match Search of the JSS using Asset Tag Field
        		 	$URL = "https://jssurl.company.com:8443/JSSResource/computers/match/$serialj";
 
-
+			// Setup CURL GET request from API
 			$chj = curl_init($URL);
-			// curl_setopt($ch, CURLOPT_MUTE, 1); 
 			curl_setopt($chj, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($chj, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($chj, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
@@ -33,12 +32,13 @@ $programj='';
 			$outputj = curl_exec($chj);
 			
 			$infoj = curl_getinfo($chj);
-			//print_r($infoj);
                 	curl_close($chj);
 
 			echo "<br>";
 
 			libxml_use_internal_errors(true);
+			
+			// Validate that we got xml back
 			$programj = simplexml_load_string("$outputj");
 			
 			if ($programj===FALSE)
@@ -54,12 +54,11 @@ $programj='';
 			//echo $xmlresponsej;
 			if ($xmlresponsej==1)
 			{
-				// Success function
+				// Success function if only 1 record is returned
                      		$URL = "https://jssurl.company.com:8443/JSSResource/computers/serialnumber/$serialj";
 				//echo "single serial";
 
                         	$chj = curl_init($URL);
-                        	// curl_setopt($ch, CURLOPT_MUTE, 1); 
                         	curl_setopt($chj, CURLOPT_SSL_VERIFYHOST, 0);
                         	curl_setopt($chj, CURLOPT_SSL_VERIFYPEER, 0);
                         	curl_setopt($chj, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
