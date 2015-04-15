@@ -8,8 +8,6 @@
 	<false/>
 	<key>AutoFillMiscellaneousForms</key>
 	<false/>
-	<key>AutoFillPasswords</key>
-	<false/>
 	<key>ManagedPlugInPolicies</key>
 	<dict>
 		<key>com.macromedia.Flash Player.plugin</key>
@@ -25,6 +23,16 @@
 					<string>www.pearsonaccess.com</string>
 					<key>PlugInPageURL</key>
 					<string>http://www.pearsonaccess.com/cs/Satellite?pagename=Pearson/QuickLink/PearsonAccess</string>
+					<key>PlugInPolicy</key>
+					<string>PlugInPolicyAllowNoSecurityRestrictions</string>
+					<key>PlugInRunUnsandboxed</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>PlugInHostname</key>
+					<string>www.knoxschools.org</string>
+					<key>PlugInPageURL</key>
+					<string>http://www.knoxschools.org</string>
 					<key>PlugInPolicy</key>
 					<string>PlugInPolicyAllowNoSecurityRestrictions</string>
 					<key>PlugInRunUnsandboxed</key>
@@ -46,7 +54,7 @@
 					<key>PlugInHostname</key>
 					<string>tn.testnav.com</string>
 					<key>PlugInPageURL</key>
-					<string>https:/tntestnav.com/</string>
+					<string>https:/tn.testnav.com/</string>
 					<key>PlugInPolicy</key>
 					<string>PlugInPolicyAllowNoSecurityRestrictions</string>
 					<key>PlugInRunUnsandboxed</key>
@@ -77,6 +85,16 @@
 					<string>systemcheck.tn.testnav.com</string>
 					<key>PlugInPageURL</key>
 					<string>http://systemcheck.tn.testnav.com/</string>
+					<key>PlugInPolicy</key>
+					<string>PlugInPolicyAllowNoSecurityRestrictions</string>
+					<key>PlugInRunUnsandboxed</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>PlugInHostname</key>
+					<string>PHeT SIMS</string>
+					<key>PlugInPageURL</key>
+					<string>https://phet.colorado.edu</string>
 					<key>PlugInPolicy</key>
 					<string>PlugInPolicyAllowNoSecurityRestrictions</string>
 					<key>PlugInRunUnsandboxed</key>
