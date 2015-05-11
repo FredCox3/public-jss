@@ -20,6 +20,16 @@
 			<array>
 				<dict>
 					<key>PlugInHostname</key>
+					<string>knoxschools.instructure.com</string>
+					<key>PlugInPageURL</key>
+					<string>https://knoxschools.instructure.com</string>
+					<key>PlugInPolicy</key>
+					<string>PlugInPolicyAllowNoSecurityRestrictions</string>
+					<key>PlugInRunUnsandboxed</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>PlugInHostname</key>
 					<string>www.pearsonaccess.com</string>
 					<key>PlugInPageURL</key>
 					<string>http://www.pearsonaccess.com/cs/Satellite?pagename=Pearson/QuickLink/PearsonAccess</string>
