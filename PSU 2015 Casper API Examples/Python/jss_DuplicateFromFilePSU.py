@@ -12,8 +12,8 @@ jssURL = "https://jssurl.com:8443"
 
 class ArgParser(object):
     def __init__(self):
-        parser = argparse.ArgumentParser(description="What CSV File do you want to process?")
-        parser.add_argument('file', type=argparse.FileType('rU'), help="Path to CSV with serials. Column serial_number")
+        parser = argparse.ArgumentParser(description="JSS Duplicate Cleanup.", epilog="You can export a list from your MySQL Server hosting the JSS Database. See GitHub Readme for more details.")
+        parser.add_argument('file', type=argparse.FileType('rU'), help="Path to CSV file with serials.")
         parser.add_argument('-u', '--user', type=str, default=None, help="JSS API Username")
         parser.add_argument('-p', '--passw', type=str, default=None, help="JSS API Password")
         parser.add_argument('-l', '--logonly', help='Log Only. Do not delete object.', action="store_true", )
