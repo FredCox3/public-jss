@@ -66,8 +66,8 @@ def main():
             asset_tag = []
             bin_number = []
 
-            for i in jsonData['computers']:
-                jssid = (i['id'])
+            for record in jsonData['computers']:
+                jssid = (record['id'])
                 print("JSSID: ", + jssid)
                 idUri = jssURL + "/JSSResource/computers/id/" + str(jssid) + "/subset/General&Location&extension_attributes"
                 loopCall = requests.get(idUri, auth=(args.username, args.password), headers=jsonheaders)
