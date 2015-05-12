@@ -61,10 +61,8 @@ Param(
 # Stored Credentials for Silent Run
 $secPw = ConvertTo-SecureString $password[0] -AsPlainText -Force
 $creds = New-Object pscredential -ArgumentList $username,$secPw
-#$creds = Get-Credential
 
 # Directory Variables
-
 $xmlWorkingDir = '{0}\{1}\xml\' -f [string]$logpath,$siteName[0]
 $classWorkingDir = '{0}\{1}\classes\' -f [string]$logpath,$siteName[0]
 $courseWorkingDir = '{0}\{1}\courses\' -f [string]$logpath,$siteName[0]
@@ -121,7 +119,7 @@ function fileTest {
     }
 }
 
-# Debugging with PS Transcript
+# Debugging with PS Transcript for headless rn
 # Start-Transcript "$classLogPath\debug_Transcript.log"
 
 # Log the start time
@@ -157,8 +155,6 @@ Get-ChildItem -Path $classWorkingDir -Filter *.csv| ForEach-Object {
     $LastWrite = $_.LastWriteTime
     $LoopCSVFile = Import-CSV $_.FullName
     $courseName = $siteName[0] + " - " +$LoopCSVFile.Term[0] + "P" + $LoopCSVFile."Period"[0] + " " + $LoopCSVFile."Teacher last name"[0] + " " + $LoopCSVFile."Teacher first name"[0]
-    #Write-Host $courseName
-
 
 #Build Some XML for upload
 $xmlPath = $xmlWorkingDir + $courseName + ".xml"
@@ -186,7 +182,6 @@ $xmlWriter.WriteStartElement('class')
 foreach ($i in $LoopcsvFile) {
         $xmlWriter.WriteElementString('student',$i."Student login") 
 }
-
     # Finalize the document:
     # Close the Student Element
     $xmlWriter.WriteEndElement()
@@ -205,9 +200,6 @@ foreach ($i in $LoopcsvFile) {
 # Flush the XML Data Stream and Close the File
 $xmlWriter.Flush()
 $xmlWriter.Close()
-
-# Build and Write the class URI for console logging of progress
-#[string]$classUri = $jssUrl + "/JSSResource/classes/name/" + $courseName
 
 [string]$classUri = "{0}/JSSResource/classes/name/{1}" -f [string]$jssUrl,$courseName
 Write-Host $classUri
@@ -255,14 +247,13 @@ $oldXMLFiles = Get-ChildItem $xmlWorkingDir -Filter *.xml | ? {
 ForEach ($file in $oldXMLFiles) {
 
     Write-Host $file.Name
-    Write-Host $file.BaseName
     # Build the URI again for the old classes
     $removeCourseName = ($file.BaseName)
     [string]$removeclassUri = "{0}/JSSResource/classes/name/{1}" -f [string]$jssUrl,$removeCourseName
     Write-Host $removeclassUri
 
     # Reporting what I am about to do
-    logData -message "[INFO] Remove Pending for $($file.FullName) - $removeCourseName"
+    logData -message "[INFO] Remove Pending for $($file.FullName) - $removeclassUri"
 
     # Actually Deleting Things here
     # Delete from JSS Classes
