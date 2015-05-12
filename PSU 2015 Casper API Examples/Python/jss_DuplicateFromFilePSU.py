@@ -3,10 +3,10 @@
 import sys
 import requests
 import argparse
-import plistlib
 import time
 import json
 import csv
+import xml.etree.cElementTree as ET
 
 jssURL = "https://jssurl.com:8443"
 
@@ -25,7 +25,7 @@ class ArgParser(object):
         self.file = args.file
 
         if self.logonly:
-            print("Log only flag set")
+            print("[INFO] Log only flag set")
         else:
             pass
 
@@ -36,7 +36,7 @@ def main():
     rowReader = csv.DictReader(importfile)
 
     if args.username is None or args.password is None:
-        print("ERROR: Please supply username and password using -u and -p option")
+        print("[ERROR] Please supply username and password using -u and -p option")
         sys.exit()
     else:
         pass
@@ -45,7 +45,7 @@ def main():
         serialNum = (row["serial_number"])
         # Build the JSS Search URI
         searchUri = jssURL + "/JSSResource/computers/match/" + serialNum
-        print("Removing Duplicates for " + serialNum)
+        print("[INFO] Removing Duplicates for " + serialNum)
 
         # Send GET request
         searchResults = requests.get(searchUri, auth=(args.username, args.password), headers=jsonheaders)
@@ -54,7 +54,7 @@ def main():
         jsonData = searchResults.json()
 
         if len(jsonData['computers']) != 2:
-            print("No Duplicate Found for " + serialNum + ". My job here is done!")
+            print("[INFO] No Duplicate Found for " + serialNum + ". My job here is done!")
             continue
         else:
             # Loop through entries to determine newest and get data from oldest
@@ -68,7 +68,7 @@ def main():
 
             for record in jsonData['computers']:
                 jssid = (record['id'])
-                print("JSSID: ", + jssid)
+                print("[INFO] JSSID: ", + jssid)
                 idUri = jssURL + "/JSSResource/computers/id/" + str(jssid) + "/subset/General&Location&extension_attributes"
                 loopCall = requests.get(idUri, auth=(args.username, args.password), headers=jsonheaders)
 
@@ -93,42 +93,54 @@ def main():
             deleteURI = ()
 
             if report_date_obj2[0] < report_date_obj2[1]:
-                print("Old Computer:", id[0], asset_tag[0], username[0], bin_number[0])
-                print("New Computer:", id[1], asset_tag[1], username[1], bin_number[1])
+                print("[INFO] Old Computer:", id[0], asset_tag[0], username[0], bin_number[0])
+                print("[INFO] New Computer:", id[1], asset_tag[1], username[1], bin_number[1])
                 updateURI = jssURL + "/JSSResource/computers/id/" + str(id[1])
                 deleteURI = jssURL + "/JSSResource/computers/id/" + str(id[0])
-                xmlData = "<computer><general><asset_tag>" + asset_tag[
-                    0] + "</asset_tag><site><id>-1</id><name>None</name></site></general><location><username>" + \
-                          username[
-                              0] + "</username></location><extension_attributes><extension_attribute><name>Storage Bin</name><type>String</type><value>" + \
-                          bin_number[0] + "</value></extension_attribute></extension_attributes></computer>"
+
+                # Build the XML Representation
+                root = ET.Element("computer")
+                general = ET.SubElement(root, 'general')
+                ET.SubElement(general, 'asset_tag').text = asset_tag[0]
+                site = ET.SubElement(general, 'site')
+                ET.SubElement(site, 'id').text = "-1"
+                ET.SubElement(site, 'name').text = "None"
+                location = ET.SubElement(root, 'location')
+                ET.SubElement(location,'username').text = username[0]
+                ext_attrs = ET.SubElement(root, 'extension_attributes')
+                ext_attr = ET.SubElement(ext_attrs, 'extension_attribute')
+                ET.SubElement(ext_attr, 'id').text = "32"
+                store_bin = ET.SubElement(ext_attr, 'name').text = "Storage Bin"
+                ET.SubElement(ext_attr, 'value').text = bin_number[0]
+
+                xmlData = ET.tostring(root)
 
                 # Delete Old Duplicate Record first, otherwise PUT will fail.
                 if args.logonly:
-                    print("LOGONLY Flag Set. No changes made to ID:",id[0])
+                    print("[INFO] LOG ONLY Flag Set. No changes made to ID:",id[0])
                 else:
                     # Help out the impatient human.
-                    print("Deleting old record. This could take some time. Delete ID:", id[0])
-                    print("URL Requested for Delete: " + deleteURI)
+                    print("[INFO] Deleting old record. This could take some time. Delete ID:", id[0])
+                    print("[INFO] URL Requested for Delete: " + deleteURI)
                     delReq = requests.delete(deleteURI, auth=(args.username,args.password), timeout=240)
 
                     # Expect status code of 200. If something else, report it.
                     if int(delReq.status_code) == 200:
-                        print("Delete Successful! Status Returned:", delReq.status_code)
+                        print("[INFO] Delete Successful! Status Returned:", delReq.status_code)
                     else:
-                        print("Delete Failed! Status Returned:", delReq.status_code)
+                        print("[INFO] Delete Failed! Status Returned:", delReq.status_code)
 
                     # Put New Info Up not that duplicate has been removed.
-                    print("URL Requested for update: " + updateURI)
+                    print("[INFO] URL Requested for update: " + updateURI)
                     putReq = requests.put(updateURI, auth=(args.username, args.password), data=xmlData, timeout=240)
 
                     # Expect Status Return of 201. If something else, report it.
                     if int(putReq.status_code) != 201:
-                        print("Error Occurred Updating! Status Returned:", putReq.status_code)
+                        print("[ERROR] Error Occurred Updating! Status Returned:", putReq.status_code)
                     else:
-                        print("Update Successful! Status Returned:", putReq.status_code)
+                        print("[INFO] Update Successful! Status Returned:", putReq.status_code)
             else:
-                print("Unexpected result. Manually inspect duplicates.")
+                print("[ERROR] Unexpected result. Manually inspect duplicates.")
 
 
 if __name__ == "__main__": main()
