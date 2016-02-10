@@ -3,6 +3,7 @@ import csv
 import time
 import getpass
 import argparse
+import sys
 from string import Template
 
 # Edit JSS URL Blow. The rest should be server agnostic.
@@ -23,16 +24,20 @@ class jss(object):
     def post_by_name(self, user, password, name, resource, xmlData):
         searchURI = jssURL + "/JSSResource/" + resource + "/name/" + str(name)
         jsonHeaders = {'accept': 'application/json'}
-        searchResults = requests.post(searchURI, auth=(user, password), data=xmlData)
-        return searchResults
-
+        try:
+            searchResults = requests.post(searchURI, auth=(user, password), data=xmlData)
+            return searchResults
+        except:
+            print("[ERROR] Couldn't connect. Verify JSS Address is correct and try again.")
+            sys.exit(0)
+        
 def main():
 
     jssObj = jss()
     username = args.username
     passw = getpass.getpass("Enter JSS API User Password: ")
 
-   rowReader = csv.DictReader(args.file)
+    rowReader = csv.DictReader(args.file)
     for row in rowReader:
         xmlTemplate = Template('<network_segment>'
                                '<name>$name</name>'
@@ -56,7 +61,7 @@ def main():
         if post.status_code == 201:
             print("[INFO] " + row['name'] + " created!")
         else:
-            print("[ERROR] " + str(post.status_code) + "Check input file for errors and re-submit.")
+            print("[ERROR] " + str(post.status_code) + " Check input file for errors or existing object in JSS and re-submit.")
             # Uncomment below if you want to visually see your XML representation
             #print(xmlUpload)
   
