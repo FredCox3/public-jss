@@ -8,8 +8,9 @@ This is my public dumping grounds for scripts, extension attributes, etc that ot
 Please feel free to submit ideas for improvments and bugs!
 
 ### jss_NetworkSegments.py
+Need to add a large range of network segments to your JSS Casper Server? jss_NetworkSegments.py allows you to create a spreadsheet (csv) of required information and upload it to your JSS using the JAMF JSS API. 
 
-Notes: Written for Python 3.4
+Notes: Written for Python 3.4, requires requests module. (pip install requests)
 
 Step 1: Create a CSV File with the following columns: 
   starting_address	ending_address	building	id	distribution_point	url	name	override_buildings	override_departments
