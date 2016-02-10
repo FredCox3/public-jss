@@ -1,0 +1,3 @@
+starting_address,ending_address,building,distribution_point,url,name,override_buildings,override_departments
+10.0.1.1,10.0.1.255,ABC,CasDP1,afp://CasDP1/CasperShare,ABC Network,TRUE,FALSE
+192.168.1.1,192.168.2.255,DEF,CasDP2,afp://CasPD2/CasperShare,DEF Network,FALSE,TRUE
