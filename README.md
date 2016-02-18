@@ -23,4 +23,11 @@ Step 2: Download Script and run using the following syntax:
 
 Example: `python3.4 ~/Desktop/jss_network_segments.py casperuser ~/Desktop/NetworkSegments.csv``
 
+### printer_destroyer.sh
+Use this script to remove a printer by IP address that may have been manually configured in your environment. Add the script to casper and use parameter 4 as the IP address field for removal. 
+
+Next, add the script to your policy. I choose to run this "before" my other scripts in the policy. Add the IP address to the correct paramter field and you're off to the races!
+
+
+
 
